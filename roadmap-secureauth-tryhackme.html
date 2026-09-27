@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>Roadmap SecureAuth+ — Projet &amp; TryHackMe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sap-blue: #0070F2;
+    --sap-blue-dark: #003DA6;
+    --navy: #1B2A4A;
+    --slate: #4B5A72;
+    --paper: #F5F6F8;
+    --card: #FFFFFF;
+    --border: #DCE1E8;
+    --accent: #E9730C;
+    --ok: #107E3E;
+    --text: #1B2A4A;
+    --text-soft: #5A6B84;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-padding-top: env(safe-area-inset-top, 0px);}
+  html, body{ height: auto; }
+  body{
+    margin:0; background: var(--paper); color: var(--text);
+    font-family: "IBM Plex Sans", Arial, Helvetica, sans-serif;
+    font-size: 15px; line-height: 1.55; -webkit-font-smoothing: antialiased;
+  }
+  .mono{ font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace; }
+  a{ color: var(--sap-blue); }
+
+  .topbar{
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+    background: var(--navy); color: #fff; padding: 10px 22px;
+    display:flex; align-items:center; justify-content: space-between; gap: 12px;
+  }
+  .brand{ display:flex; align-items:center; gap:12px; }
+  .brand .lockup{ display:flex; align-items:center; gap:8px; }
+  .brand .brand-logo.sap-logo{
+    height: 26px; width: auto; display: block;
+    border-radius: 3px;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.18));
+  }
+  .brand .ibm-logo-badge{
+    background: #ffffff;
+    height: 26px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.22);
+    transition: transform 0.2s ease;
+  }
+  .brand .ibm-logo-badge:hover{
+    transform: translateY(-1px);
+  }
+  .brand .brand-logo.ibm-logo{
+    height: 14px;
+    width: auto;
+    display: block;
+  }
+  .brand .x{ color:#7C8CB0; font-size: 13px; font-weight: 500; user-select: none; }
+  .brand .role{ color:#B9C6E0; font-size: 12px; font-weight: 500; padding-left: 8px; border-left: 1px solid #33436A; margin-left: 2px; }
+  @media (max-width: 600px){ .brand .role{ display:none; } }
+
+  .topbar-right{ display:flex; align-items:center; gap: 14px; }
+  .topbar .tag{
+    font-size: 11px; color:#B9C6E0; font-family:"IBM Plex Mono",monospace;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  @media (max-width: 760px){ .topbar .tag{ display:none; } }
+
+  .topbar-progress-pill{
+    display:inline-flex; align-items:center; gap: 6px;
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.18);
+    padding: 3px 10px; border-radius: 999px; font-family:"IBM Plex Mono",monospace;
+    font-size: 11.5px; color: #EAF0FA; white-space: nowrap; cursor: pointer;
+    transition: background 0.2s ease;
+  }
+  .topbar-progress-pill:hover{ background: rgba(255,255,255,0.18); }
+  .topbar-progress-pill .pill-dot{
+    width: 7px; height: 7px; border-radius: 50%; background: #22C55E;
+    box-shadow: 0 0 6px #22C55E;
+  }
+  .topbar-progress-line{
+    position: absolute; bottom: 0; left: 0; height: 3px;
+    background: linear-gradient(90deg, var(--sap-blue) 0%, #009ad9 50%, var(--ok) 100%);
+    width: 10%; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 10px rgba(0, 112, 242, 0.6);
+  }
+
+  /* Progress Box in Hero */
+  .progress-box{
+    margin-top: 24px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 24px;
+    box-shadow: 0 2px 10px rgba(27,42,74,0.04);
+  }
+  .progress-box-top{
+    display:flex; align-items:center; justify-content:space-between; gap: 14px;
+    margin-bottom: 14px; flex-wrap: wrap;
+  }
+  .progress-badge-lbl{
+    font-family:"IBM Plex Mono", monospace; font-size: 11px;
+    font-weight: 600; color: var(--sap-blue); letter-spacing: .5px;
+    display: block; margin-bottom: 4px;
+  }
+  .progress-headline{
+    margin: 0; font-size: 18px; font-weight: 700; color: var(--navy);
+  }
+  .progress-box-right{
+    display:flex; align-items:baseline; gap: 12px;
+  }
+  .progress-stat-pill{
+    font-size: 12.5px; font-family:"IBM Plex Mono", monospace;
+    color: var(--text-soft); background: var(--paper);
+    padding: 4px 12px; border-radius: 999px; border: 1px solid var(--border);
+  }
+  .progress-stat-pct{
+    font-size: 28px; font-weight: 700; font-family:"IBM Plex Mono", monospace;
+    color: var(--ok); line-height: 1;
+  }
+
+  .progress-bar-container{
+    position: relative; width: 100%; height: 16px;
+    background: #E8EEF5; border-radius: 999px; overflow: hidden;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+  }
+  .progress-bar-fill{
+    height: 100%;
+    background: linear-gradient(90deg, var(--sap-blue) 0%, #009ad9 50%, var(--ok) 100%);
+    border-radius: 999px;
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    box-shadow: 0 0 12px rgba(0, 112, 242, 0.35);
+  }
+  .progress-bar-fill::after{
+    content: ""; position: absolute; top: 0; left: 0; bottom: 0; right: 0;
+    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.35) 50%, rgba(255,255,255,0) 100%);
+    animation: shimmer 2.5s infinite;
+  }
+  @keyframes shimmer{
+    0%{ transform: translateX(-100%); }
+    100%{ transform: translateX(100%); }
+  }
+
+  .progress-milestones{
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 6px;
+    margin-top: 14px;
+  }
+  @media (max-width: 760px){
+    .progress-milestones{
+      grid-template-columns: repeat(5, 1fr);
+      row-gap: 8px;
+    }
+  }
+  .milestone-btn{
+    background: var(--paper); border: 1px solid var(--border);
+    border-radius: 8px; padding: 7px 4px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; cursor: pointer;
+    transition: all 0.2s ease; text-decoration: none;
+  }
+  .milestone-btn:hover{
+    background: #EAF2FF; border-color: var(--sap-blue);
+    transform: translateY(-2px);
+  }
+  .milestone-btn .m-num{
+    font-family:"IBM Plex Mono", monospace; font-size: 12px; font-weight: 700;
+    color: var(--slate);
+  }
+  .milestone-btn .m-name{
+    font-size: 10px; color: var(--text-soft); white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis; max-width: 100%; margin-top: 1px;
+  }
+  .milestone-btn.done{
+    background: #E8F5E9; border-color: #A5D6A7;
+  }
+  .milestone-btn.done .m-num{
+    color: var(--ok);
+  }
+  .milestone-btn.done .m-name{
+    color: #2E7D32; font-weight: 500;
+  }
+  .milestone-btn.active{
+    border-color: var(--accent); background: #FFF8E1;
+  }
+  .milestone-btn.active .m-num{
+    color: var(--accent);
+  }
+
+  .progress-box-actions{
+    display:flex; align-items:center; justify-content:space-between; gap: 12px;
+    margin-top: 14px; padding-top: 12px; border-top: 1px solid #EEF2F6;
+    flex-wrap: wrap;
+  }
+  .progress-tip{ font-size: 12.5px; color: var(--text-soft); }
+  .progress-action-btns{ display:flex; gap: 8px; }
+  .btn-sm{
+    font-family:"IBM Plex Sans", sans-serif; font-size: 11.5px; font-weight: 500;
+    background: var(--paper); color: var(--text-soft); border: 1px solid var(--border);
+    padding: 5px 12px; border-radius: 6px; cursor: pointer; transition: all 0.2s;
+  }
+  .btn-sm:hover{
+    background: #F1F4F9; color: var(--text); border-color: #B9C6E0;
+  }
+
+  /* Card top badges & toggles */
+  .card-top-badges{
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  }
+  .step-toggle-btn{
+    font-family:"IBM Plex Sans", sans-serif; font-size: 11.5px; font-weight: 600;
+    padding: 4px 12px; border-radius: 999px; border: 1.5px solid var(--border);
+    background: var(--paper); color: var(--text-soft); cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s ease;
+    user-select: none;
+  }
+  .step-toggle-btn:hover{
+    border-color: var(--sap-blue); color: var(--sap-blue);
+    transform: translateY(-1px); box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  }
+  .step-toggle-btn.done{
+    background: var(--ok); border-color: var(--ok); color: #fff;
+  }
+  .step-toggle-btn.priority{
+    background: var(--accent); border-color: var(--accent); color: #fff;
+  }
+  .step-toggle-btn .check-icon{
+    font-weight: 700; font-size: 12px;
+  }
+
+  .filter-group{ display:flex; gap: 4px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 3px; }
+  .filter-btn{
+    border: none; background: transparent; font-family:"IBM Plex Sans",sans-serif;
+    font-size: 12px; font-weight: 500; color: var(--text-soft); padding: 5px 11px;
+    border-radius: 6px; cursor: pointer; transition: all 0.15s ease;
+  }
+  .filter-btn.active{
+    background: var(--navy); color: #fff; font-weight: 600;
+  }
+  .filter-btn:hover:not(.active){
+    background: var(--paper); color: var(--text);
+  }
+  .phase.is-hidden{ display: none !important; }
+
+
+  .hero{ max-width: 1080px; margin: 0 auto; padding: 56px 22px 34px; }
+  .hero .kicker{ color: var(--accent); font-weight:600; font-size: 13px; font-family:"IBM Plex Mono",monospace; margin: 0 0 14px; }
+  .hero h1{ margin: 0 0 12px; font-size: clamp(30px, 5vw, 46px); line-height: 1.08; font-weight: 700; color: var(--text); max-width: 20ch; }
+  .hero p.lede{ max-width: 64ch; color: var(--text-soft); font-size: 16px; margin: 0 0 28px; }
+
+  .hero-stats{ display:grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow:hidden; }
+  .hero-stats .stat{ background: var(--card); padding: 16px 16px; }
+  .hero-stats .stat .n{ font-size: 24px; font-weight:700; color: var(--navy); font-family:"IBM Plex Mono",monospace; }
+  .hero-stats .stat .l{ font-size: 11.5px; color: var(--text-soft); margin-top: 2px; }
+  @media (max-width: 640px){ .hero-stats{ grid-template-columns: repeat(2,1fr); } }
+
+  .callout{
+    margin-top: 24px; border: 1px solid var(--border); border-left: 4px solid var(--sap-blue);
+    background: var(--card); border-radius: 0 10px 10px 0; padding: 16px 18px;
+  }
+  .callout .lbl{ font-family:"IBM Plex Mono",monospace; font-size: 11px; color: var(--sap-blue); font-weight:600; margin-bottom:6px; }
+  .callout p{ margin:0; font-size: 14px; color: var(--text); }
+
+  .wrap{ max-width: 1080px; margin: 0 auto; padding: 0 22px 80px; }
+  .section-head{ display:flex; align-items:baseline; justify-content:space-between; gap: 12px; margin: 54px 0 22px; }
+  .section-head h2{ font-size: 20px; margin:0; color: var(--navy); }
+  .section-head .sub{ font-size: 13px; color: var(--text-soft); }
+
+  .timeline{ position: relative; }
+  .timeline::before{ content:""; position:absolute; left: 27px; top: 6px; bottom: 6px; width: 2px; background: var(--border); }
+  @media (max-width: 640px){ .timeline::before{ left: 21px; } }
+
+  .phase{ position: relative; padding-left: 68px; margin-bottom: 22px; }
+  @media (max-width: 640px){ .phase{ padding-left: 52px; } }
+  .phase .num{
+    position:absolute; left: 0; top: 0; width: 56px; height: 56px; border-radius: 50%;
+    background: var(--card); border: 2px solid var(--sap-blue); color: var(--sap-blue);
+    display:flex; align-items:center; justify-content:center; font-family:"IBM Plex Mono",monospace; font-weight:700; font-size: 15px;
+  }
+  @media (max-width: 640px){ .phase .num{ width:44px; height:44px; font-size:12.5px; } }
+  .phase.priority .num{ background: var(--sap-blue); color:#fff; }
+  .phase.done .num{ background: var(--ok); border-color: var(--ok); color:#fff; }
+
+  .card{ background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 24px; }
+  @media (max-width: 640px){ .card{ padding: 16px 16px; } }
+  .phase.done .card{ border-color: #BFE3CC; background: #F3FBF6; }
+
+  .card-top{ display:flex; flex-wrap:wrap; align-items:center; gap: 10px 14px; margin-bottom: 6px; }
+  .card-top h3{ font-size: 17px; margin: 0; color: var(--navy); flex: 1 1 auto; min-width: 180px; }
+  .badge{
+    font-size: 11px; font-family:"IBM Plex Mono",monospace; color: var(--slate); background: var(--paper);
+    border: 1px solid var(--border); padding: 3px 9px; border-radius: 999px; white-space: nowrap;
+  }
+  .badge.priority{ color: #fff; background: var(--accent); border-color: var(--accent); font-family:"IBM Plex Sans",sans-serif; font-weight:600; }
+  .badge.done{ color: #fff; background: var(--ok); border-color: var(--ok); font-family:"IBM Plex Sans",sans-serif; font-weight:600; }
+  .badge.none{ color: var(--text-soft); font-style: italic; }
+
+  .courses{ margin-top: 14px; display:flex; flex-direction:column; gap:12px; }
+  .course{ border-left: 3px solid var(--sap-blue); background: var(--paper); border-radius: 0 8px 8px 0; padding: 12px 14px; }
+  .course.thm{ border-left-color: var(--accent); }
+  .course.self{ border-left-color: var(--slate); }
+  .course .src{ font-size: 10.5px; font-weight: 600; letter-spacing: .3px; color: var(--sap-blue); margin-bottom: 4px; }
+  .course.thm .src{ color: var(--accent); }
+  .course.self .src{ color: var(--slate); }
+  .course a.title{ display:inline-block; font-weight: 600; font-size: 14.5px; color: var(--text); text-decoration: none; border-bottom: 1px solid var(--border); }
+  .course a.title:hover{ border-bottom-color: var(--sap-blue); color: var(--sap-blue); }
+  .course .note{ font-size: 12.5px; color: var(--text-soft); margin-top: 4px; }
+
+  .points{ margin: 14px 0 0; padding: 0; list-style: none; display:grid; grid-template-columns: repeat(2, 1fr); gap: 6px 18px; }
+  @media (max-width: 560px){ .points{ grid-template-columns: 1fr; } }
+  .points li{ font-size: 13.5px; color: var(--text-soft); padding-left: 14px; position: relative; }
+  .points li::before{ content:""; position:absolute; left:0; top: 8px; width:5px; height:5px; border-radius: 50%; background: var(--sap-blue); }
+
+  .flow{
+    margin-top: 14px; font-size: 13px; color: var(--navy); background: var(--paper);
+    border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px;
+    font-family:"IBM Plex Mono",monospace;
+  }
+
+  .quote{
+    margin-top: 14px; background: var(--navy); color: #EAF0FA; border-radius: 10px;
+    padding: 14px 18px; font-size: 13.5px; font-style: italic; position: relative;
+  }
+  .quote .qlbl{ font-family:"IBM Plex Sans",sans-serif; font-style: normal; font-weight:600; font-size:10.5px; letter-spacing:.4px; color:#8FB4F0; display:block; margin-bottom:6px; }
+
+  .duration{ margin-top: 14px; font-size: 12.5px; color: var(--slate); display:flex; align-items:center; gap:6px; }
+  .duration svg{ width:14px; height:14px; flex:none; }
+
+  .chain{
+    display:flex; flex-wrap:wrap; align-items:center; gap: 6px 4px; font-size: 12.5px;
+    font-family:"IBM Plex Mono",monospace; color: var(--navy);
+  }
+  .chain .step{ background: var(--card); border: 1px solid var(--border); padding: 6px 10px; border-radius: 7px; }
+  .chain .arrow{ color: var(--text-soft); }
+
+  .rule{
+    margin-top: 22px; border: 1px dashed var(--sap-blue); border-radius: 10px; background: #EAF2FF;
+    padding: 16px 18px; font-size: 13.5px; color: var(--navy);
+  }
+  .rule .lbl{ font-family:"IBM Plex Mono",monospace; font-size: 11px; color: var(--sap-blue-dark); font-weight:600; margin-bottom:6px; }
+
+  .warn{
+    margin-top: 14px; border-left: 4px solid var(--accent); background: #FFF4EA;
+    border-radius: 0 8px 8px 0; padding: 10px 14px; font-size: 13px; color: #7A3E0A;
+  }
+
+  footer{ max-width: 1080px; margin: 0 auto; padding: 30px 22px 50px; color: var(--text-soft); font-size: 12px; border-top: 1px solid var(--border); }
+  a:focus-visible, button:focus-visible{ outline: 2px solid var(--sap-blue); outline-offset: 2px; }
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="brand">
+      <span class="lockup">
+        <img src="sap-logo.svg" alt="SAP" class="brand-logo sap-logo">
+        <span class="x">&times;</span>
+        <span class="ibm-logo-badge" title="IBM">
+          <img src="logo-ibm.png" alt="IBM" class="brand-logo ibm-logo">
+        </span>
+      </span>
+      <span class="role">SecureAuth+ Build Track</span>
+    </div>
+    <div class="topbar-right">
+      <div class="tag">Projet SecureAuth+ × TryHackMe — plan d'implémentation</div>
+      <div class="topbar-progress-pill" id="topbar-progress-pill" title="Progression validée">
+        <span class="pill-dot"></span>
+        <span class="pill-text" id="topbar-pill-text">1/10 (10%)</span>
+      </div>
+    </div>
+    <div class="topbar-progress-line" id="topbar-progress-line" style="width: 10%;"></div>
+  </div>
+
+  <section class="hero">
+    <p class="kicker">Apprentissage par la pratique</p>
+    <h1>Roadmap SecureAuth+ &amp; TryHackMe</h1>
+    <p class="lede">
+      Chaque module de ton projet SecureAuth+ est couplé à une room TryHackMe qui consolide la notion avant
+      l'implémentation, et débouche sur une phrase d'entretien prête à l'emploi. Séquentiel, un module à la fois.
+    </p>
+    <div class="hero-stats">
+      <div class="stat"><div class="n">10</div><div class="l">Étapes (0–9)</div></div>
+      <div class="stat"><div class="n">6</div><div class="l">Rooms TryHackMe</div></div>
+      <div class="stat"><div class="n" id="stat-done-count">1</div><div class="l" id="stat-done-label">Module terminé</div></div>
+      <div class="stat"><div class="n" id="stat-progress-pct">10%</div><div class="l">Progression globale</div></div>
+    </div>
+
+    <!-- BARRE DE PROGRESSION DE LA ROADMAP -->
+    <div class="progress-box" id="roadmap-progress">
+      <div class="progress-box-top">
+        <div class="progress-box-left">
+          <span class="progress-badge-lbl">SUIVI DE PROGRESSION</span>
+          <h2 class="progress-headline">Avancement de la roadmap SecureAuth+</h2>
+        </div>
+        <div class="progress-box-right">
+          <span class="progress-stat-pill" id="progress-stat-pill">1 / 10 validée</span>
+          <span class="progress-stat-pct" id="progress-stat-pct">10%</span>
+        </div>
+      </div>
+
+      <div class="progress-bar-container">
+        <div class="progress-bar-fill" id="roadmap-progress-fill" style="width: 10%;"></div>
+      </div>
+
+      <div class="progress-milestones" id="progress-milestones">
+        <button type="button" class="milestone-btn done" data-target="0" title="Étape 0 : JML — Terminé">
+          <span class="m-num">0</span>
+          <span class="m-name">JML</span>
+        </button>
+        <button type="button" class="milestone-btn active" data-target="1" title="Étape 1 : IAM — Priorité">
+          <span class="m-num">1</span>
+          <span class="m-name">IAM</span>
+        </button>
+        <button type="button" class="milestone-btn" data-target="2" title="Étape 2 : SU53">
+          <span class="m-num">2</span>
+          <span class="m-name">SU53</span>
+        </button>
+        <button type="button" class="milestone-btn" data-target="3" title="Étape 3 : Access Review">
+          <span class="m-num">3</span>
+          <span class="m-name">Review</span>
+        </button>
+        <button type="button" class="milestone-btn" data-target="4" title="Étape 4 : Tests">
+          <span class="m-num">4</span>
+          <span class="m-name">Tests</span>
+        </button>
+        <button type="button" class="milestone-btn" data-target="5" title="Étape 5 : SoD">
+          <span class="m-num">5</span>
+          <span class="m-name">SoD</span>
+        </button>
+        <button type="button" class="milestone-btn" data-target="6" title="Étape 6 : HANA — Priorité">
+          <span class="m-num">6</span>
+          <span class="m-name">HANA</span>
+        </button>
+        <button type="button" class="milestone-btn" data-target="7" title="Étape 7 : Upgrade">
+          <span class="m-num">7</span>
+          <span class="m-name">Upgrade</span>
+        </button>
+        <button type="button" class="milestone-btn" data-target="8" title="Étape 8 : Fiori">
+          <span class="m-num">8</span>
+          <span class="m-name">Fiori</span>
+        </button>
+        <button type="button" class="milestone-btn" data-target="9" title="Étape 9 : SIEM — Priorité">
+          <span class="m-num">9</span>
+          <span class="m-name">SIEM</span>
+        </button>
+      </div>
+
+      <div class="progress-box-actions">
+        <span class="progress-tip">💡 Coche chaque étape sur sa carte pour enregistrer ta progression au fur et à mesure (sauvegardé automatiquement).</span>
+        <div class="progress-action-btns">
+          <button type="button" class="btn-sm" id="btn-reset-progress" title="Réinitialiser la progression">Réinitialiser</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="lbl">PROCHAIN MOUVEMENT PRÉCIS</div>
+      <p>Termine la room <strong>Identity and Access Management</strong> (Étape 1), puis attaque la conception/implémentation du <strong>Module 2 — SU53</strong> (Étape 2). Ne commence pas trois modules en parallèle.</p>
+    </div>
+  </section>
+
+  <div class="wrap">
+
+    <div class="section-head">
+      <div>
+        <h2>Étapes du parcours</h2>
+        <span class="sub">Module SecureAuth+ → room TryHackMe → phrase d'entretien</span>
+      </div>
+      <div class="filter-group">
+        <button type="button" class="filter-btn active" data-filter="all">Toutes (<span id="filter-all-cnt">10</span>)</button>
+        <button type="button" class="filter-btn" data-filter="todo">À faire (<span id="filter-todo-cnt">9</span>)</button>
+        <button type="button" class="filter-btn" data-filter="done">Validées (<span id="filter-done-cnt">1</span>)</button>
+      </div>
+    </div>
+
+    <div class="timeline">
+
+      <!-- ÉTAPE 0 -->
+      <div class="phase done" id="step-0" data-step="0">
+        <div class="num">0</div>
+        <div class="card">
+          <div class="card-top">
+            <h3>Module 1 — Joiner / Mover / Leaver</h3>
+            <div class="card-top-badges">
+              <button type="button" class="step-toggle-btn done" data-step="0" aria-pressed="true" title="Cliquer pour changer le statut">
+                <span class="check-icon">✓</span>
+                <span class="status-txt">Terminé</span>
+              </button>
+            </div>
+          </div>
+          <div class="courses">
+            <div class="course self">
+              <div class="src">SECUREAUTH+</div>
+              <span class="title" style="border-bottom:none;">Cycle de vie utilisateur — JML</span>
+            </div>
+          </div>
+          <ul class="points">
+            <li>Création, changement, révocation des accès</li>
+            <li>Least Privilege</li>
+            <li>Privilege Creep</li>
+          </ul>
+          <div class="quote">
+            <span class="qlbl">RÉSULTAT ENTRETIEN</span>
+            Tu peux déjà expliquer le cycle de vie d'un utilisateur.
+          </div>
+        </div>
+      </div>
+
+      <!-- ÉTAPE 1 -->
+      <div class="phase priority" id="step-1" data-step="1">
+        <div class="num">1</div>
+        <div class="card">
+          <div class="card-top">
+            <h3>Identity and Access Management</h3>
+            <div class="card-top-badges">
+              <button type="button" class="step-toggle-btn priority" data-step="1" aria-pressed="false" title="Cliquer pour changer le statut">
+                <span class="check-icon">○</span>
+                <span class="status-txt">À faire maintenant</span>
+              </button>
+              <span class="badge">Avant Module 2</span>
+            </div>
+          </div>
+          <div class="courses">
+            <div class="course thm">
+              <div class="src">TRYHACKME</div>
+              <a class="title" href="https://tryhackme.com/room/iaaaidm" target="_blank" rel="noopener">Identity and Access Management</a>
+              <div class="note">Room Premium. Consolide Identity, Authentication, Authorization, RBAC, SSO, Access Control.</div>
+            </div>
+          </div>
+          <div class="flow">User &rarr; Authentication &rarr; Role &rarr; Permission &rarr; Resource</div>
+          <div class="warn">Pas de nouveau module SecureAuth en parallèle : termine d'abord cette base.</div>
+        </div>
+      </div>
+
+      <!-- ÉTAPE 2 -->
+      <div class="phase" id="step-2" data-step="2">
+        <div class="num">2</div>
+        <div class="card">
+          <div class="card-top">
+            <h3>Module 2 — Diagnostic d'Autorisation / SU53</h3>
+            <div class="card-top-badges">
+              <button type="button" class="step-toggle-btn" data-step="2" aria-pressed="false" title="Cliquer pour changer le statut">
+                <span class="check-icon">○</span>
+                <span class="status-txt">À faire</span>
+              </button>
+              <span class="badge">Après Étape 1</span>
+            </div>
+          </div>
+          <div class="courses">
+            <div class="course thm">
+              <div class="src">TRYHACKME</div>
+              <a class="title" href="https://tryhackme.com/room/introwebapplicationsecurity" target="_blank" rel="noopener">Web Application Security</a>
+              <div class="note">Concentre-toi surtout sur Authentication / Broken Access Control / HTTP 403.</div>
+            </div>
+            <div class="course self">
+              <div class="src">SECUREAUTH+</div>
+              <span class="title" style="border-bottom:none;">Implémentation du diagnostic</span>
+            </div>
+          </div>
+          <div class="flow">Tentative d'accès &rarr; 403 &rarr; capture user/rôle/permission &rarr; diagnostic</div>
+          <div class="quote">
+            <span class="qlbl">OBJECTIF ENTRETIEN</span>
+            « Lorsqu'un utilisateur est bloqué, je cherche d'abord quel contrôle d'autorisation a échoué et si l'accès demandé est réellement justifié. »
+          </div>
+          <div class="tcodes" style="margin-top:12px; display:flex; gap:6px;">
+            <span class="badge">Équivalent conceptuel : SU53 / ST01</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ÉTAPE 3 -->
+      <div class="phase" id="step-3" data-step="3">
+        <div class="num">3</div>
+        <div class="card">
+          <div class="card-top">
+            <h3>Module 3 — Access Review</h3>
+            <div class="card-top-badges">
+              <button type="button" class="step-toggle-btn" data-step="3" aria-pressed="false" title="Cliquer pour changer le statut">
+                <span class="check-icon">○</span>
+                <span class="status-txt">À faire</span>
+              </button>
+              <span class="badge">Avant ou pendant l'implémentation</span>
+            </div>
+          </div>
+          <div class="courses">
+            <div class="course thm">
+              <div class="src">TRYHACKME</div>
+              <a class="title" href="https://tryhackme.com/room/m365monitoringbasics" target="_blank" rel="noopener">M365 Monitoring Basics</a>
+              <div class="note">Cherche surtout : changements d'identités, connexions, modifications de rôles, audit.</div>
+            </div>
+            <div class="course self">
+              <div class="src">SECUREAUTH+</div>
+              <span class="title" style="border-bottom:none;">Revue périodique des accès</span>
+            </div>
+          </div>
+          <div class="flow">User + Role &rarr; Manager Review &rarr; Keep / Revoke &rarr; Audit Log</div>
+          <div class="quote">
+            <span class="qlbl">OBJECTIF ENTRETIEN</span>
+            « Un accès ne doit pas rester définitif. Il faut vérifier périodiquement qu'il correspond toujours au besoin métier. »
+          </div>
+        </div>
+      </div>
+
+      <!-- ÉTAPE 4 -->
+      <div class="phase" id="step-4" data-step="4">
+        <div class="num">4</div>
+        <div class="card">
+          <div class="card-top">
+            <h3>Module 4 — Tests d'Autorisations</h3>
+            <div class="card-top-badges">
+              <button type="button" class="step-toggle-btn" data-step="4" aria-pressed="false" title="Cliquer pour changer le statut">
+                <span class="check-icon">○</span>
+                <span class="status-txt">À faire</span>
+              </button>
+              <span class="badge none">Aucune nouvelle room</span>
+            </div>
+          </div>
+          <div class="courses">
+            <div class="course self">
+              <div class="src">SECUREAUTH+</div>
+              <span class="title" style="border-bottom:none;">Réutilise Web Application Security (Étape 2)</span>
+            </div>
+          </div>
+          <ul class="points">
+            <li>Positive Test = accès autorisé</li>
+            <li>Negative Test = accès interdit / 403</li>
+            <li>Exemple : FINANCE &rarr; invoices (autorisé)</li>
+            <li>Exemple : FINANCE &rarr; HR payroll (refusé)</li>
+          </ul>
+          <div class="quote">
+            <span class="qlbl">OBJECTIF ENTRETIEN</span>
+            « Je vérifie que le rôle permet les activités attendues, mais aussi qu'il bloque les activités hors périmètre. »
+          </div>
+          <div class="badge" style="margin-top:12px; display:inline-block;">Relié à la recette des rôles PFCG</div>
+        </div>
+      </div>
+
+      <!-- ÉTAPE 5 -->
+      <div class="phase" id="step-5" data-step="5">
+        <div class="num">5</div>
+        <div class="card">
+          <div class="card-top">
+            <h3>Module 5 — Segregation of Duties (SoD)</h3>
+            <div class="card-top-badges">
+              <button type="button" class="step-toggle-btn" data-step="5" aria-pressed="false" title="Cliquer pour changer le statut">
+                <span class="check-icon">○</span>
+                <span class="status-txt">À faire</span>
+              </button>
+              <span class="badge none">Aucune room — focus métier</span>
+            </div>
+          </div>
+          <div class="courses">
+            <div class="course self">
+              <div class="src">SECUREAUTH+</div>
+              <span class="title" style="border-bottom:none;">Matrice de conflits de rôles</span>
+            </div>
+          </div>
+          <div class="flow">Role A + Role B &rarr; SoD Matrix &rarr; Conflict &rarr; Block / Warning</div>
+          <ul class="points">
+            <li>Exemple de conflit : Create Purchase Request + Approve Purchase</li>
+          </ul>
+          <div class="quote">
+            <span class="qlbl">OBJECTIF ENTRETIEN</span>
+            « Même si deux rôles sont légitimes séparément, leur combinaison peut créer un risque. »
+          </div>
+          <div class="badge" style="margin-top:12px; display:inline-block;">Module GRC / Access Risk</div>
+        </div>
+      </div>
+
+      <!-- ÉTAPE 6 -->
+      <div class="phase priority" id="step-6" data-step="6">
+        <div class="num">6</div>
+        <div class="card">
+          <div class="card-top">
+            <h3>Module 6 — SAP HANA Database Security</h3>
+            <div class="card-top-badges">
+              <button type="button" class="step-toggle-btn priority" data-step="6" aria-pressed="false" title="Cliquer pour changer le statut">
+                <span class="check-icon">○</span>
+                <span class="status-txt">Priorité</span>
+              </button>
+            </div>
+          </div>
+          <div class="courses">
+            <div class="course thm">
+              <div class="src">TRYHACKME</div>
+              <a class="title" href="https://tryhackme.com/room/linuxloggingforsoc" target="_blank" rel="noopener">Linux Logging for SOC</a>
+              <div class="note">Concentre-toi sur : users, permissions, sudo, SSH, logs, événements d'authentification.</div>
+            </div>
+            <div class="course self">
+              <div class="src">SECUREAUTH+</div>
+              <span class="title" style="border-bottom:none;">Scénario pédagogique de privilèges DB</span>
+              <div class="note">Ne cherche pas à recréer HANA dans Spring Boot.</div>
+            </div>
+          </div>
+          <div class="flow">Database User &rarr; Role &rarr; Privilege &rarr; Object</div>
+          <div class="quote">
+            <span class="qlbl">OBJECTIF ENTRETIEN</span>
+            « La sécurité SAP ne s'arrête pas à S/4HANA : il faut aussi protéger la couche HANA et l'OS sous-jacent. »
+          </div>
+          <div class="badge" style="margin-top:12px; display:inline-block;">Cible les privilèges HANA DB</div>
+        </div>
+      </div>
+
+      <!-- ÉTAPE 7 -->
+      <div class="phase" id="step-7" data-step="7">
+        <div class="num">7</div>
+        <div class="card">
+          <div class="card-top">
+            <h3>Module 7 — Upgrade S/4HANA / SU24 / SU25</h3>
+            <div class="card-top-badges">
+              <button type="button" class="step-toggle-btn" data-step="7" aria-pressed="false" title="Cliquer pour changer le statut">
+                <span class="check-icon">○</span>
+                <span class="status-txt">À faire</span>
+              </button>
+              <span class="badge none">Aucune room — priorité cours SAP</span>
+            </div>
+          </div>
+          <div class="courses">
+            <div class="course self">
+              <div class="src">SECUREAUTH+</div>
+              <span class="title" style="border-bottom:none;">Simulation d'un changement de politique/version</span>
+            </div>
+          </div>
+          <div class="flow">Upgrade &rarr; changement des authorization checks &rarr; SU25 &rarr; SU24 &rarr; PFCG &rarr; retest</div>
+          <div class="quote">
+            <span class="qlbl">OBJECTIF ENTRETIEN</span>
+            « Après une évolution ou un upgrade, il faut analyser l'impact sur les autorisations et retester les rôles. »
+          </div>
+          <div class="badge" style="margin-top:12px; display:inline-block;">Dédié à SU24 / SU25 / PFCG Merge</div>
+        </div>
+      </div>
+
+      <!-- ÉTAPE 8 -->
+      <div class="phase" id="step-8" data-step="8">
+        <div class="num">8</div>
+        <div class="card">
+          <div class="card-top">
+            <h3>Module 8 — Fiori / OData / IAM / SSO</h3>
+            <div class="card-top-badges">
+              <button type="button" class="step-toggle-btn" data-step="8" aria-pressed="false" title="Cliquer pour changer le statut">
+                <span class="check-icon">○</span>
+                <span class="status-txt">À faire</span>
+              </button>
+              <span class="badge">S'appuie sur Étape 1</span>
+            </div>
+          </div>
+          <div class="courses">
+            <div class="course self">
+              <div class="src">SECUREAUTH+</div>
+              <span class="title" style="border-bottom:none;">Authentication / MFA / token / roles</span>
+              <div class="note">Ne prétends pas reproduire Fiori ; utilise ton projet pour comprendre la logique des couches. Reviens sur tes notes de la room Identity and Access Management.</div>
+            </div>
+          </div>
+          <div class="flow">User &rarr; SSO &rarr; Fiori &rarr; OData Service &rarr; Backend Authorization</div>
+          <div class="badge" style="margin-top:12px; display:inline-block;">Couvre catalogues Fiori, S_SERVICE et SAML2</div>
+        </div>
+      </div>
+
+      <!-- ÉTAPE 9 -->
+      <div class="phase priority" id="step-9" data-step="9">
+        <div class="num">9</div>
+        <div class="card">
+          <div class="card-top">
+            <h3>Module 9 — Projet / Audit</h3>
+            <div class="card-top-badges">
+              <button type="button" class="step-toggle-btn priority" data-step="9" aria-pressed="false" title="Cliquer pour changer le statut">
+                <span class="check-icon">○</span>
+                <span class="status-txt">Étape finale</span>
+              </button>
+            </div>
+          </div>
+          <div class="courses">
+            <div class="course thm">
+              <div class="src">TRYHACKME</div>
+              <a class="title" href="https://tryhackme.com/room/introtosiem" target="_blank" rel="noopener">Introduction to SIEM</a>
+            </div>
+            <div class="course thm">
+              <div class="src">TRYHACKME</div>
+              <a class="title" href="https://tryhackme.com/room/loganalysiswithsiem" target="_blank" rel="noopener">Log Analysis with SIEM</a>
+            </div>
+            <div class="course self">
+              <div class="src">SECUREAUTH+</div>
+              <span class="title" style="border-bottom:none;">Boucle complète événement → documentation</span>
+            </div>
+          </div>
+          <div class="flow">Event &rarr; Log &rarr; Alert &rarr; Investigation &rarr; Change &rarr; Test &rarr; Validation &rarr; Documentation</div>
+          <div class="note" style="font-size:12.5px; color:var(--text-soft); margin-top:10px;">C'est ici que tu reconnectes fortement avec ton expérience AXA.</div>
+          <div class="badge" style="margin-top:12px; display:inline-block;">Couvre collaboration Basis / Dev / Métier et méthodologie projet</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CHEMIN COMPLET -->
+    <div class="section-head">
+      <h2>Le chemin complet</h2>
+      <span class="sub">Vue d'ensemble de la séquence</span>
+    </div>
+    <div class="card">
+      <div class="chain">
+        <span class="step">JML</span><span class="arrow">&rarr;</span>
+        <span class="step">IAM room</span><span class="arrow">&rarr;</span>
+        <span class="step">SU53 + Web Security</span><span class="arrow">&rarr;</span>
+        <span class="step">Access Review + M365</span><span class="arrow">&rarr;</span>
+        <span class="step">Authorization Tests</span><span class="arrow">&rarr;</span>
+        <span class="step">SoD</span><span class="arrow">&rarr;</span>
+        <span class="step">HANA + Linux Logs</span><span class="arrow">&rarr;</span>
+        <span class="step">SU24/SU25</span><span class="arrow">&rarr;</span>
+        <span class="step">Fiori/OData/SSO</span><span class="arrow">&rarr;</span>
+        <span class="step">SIEM + Audit</span>
+      </div>
+
+      <div class="rule">
+        <div class="lbl">RÈGLE APPLIQUÉE APRÈS CHAQUE MODULE</div>
+        Comprendre &rarr; Concevoir &rarr; Implémenter &rarr; Tester &rarr; Documenter &rarr; Expliquer en 30 secondes.
+      </div>
+      <div class="warn">Ne commence pas trois modules en même temps.</div>
+    </div>
+
+  </div>
+
+  <footer>
+    Roadmap projet SecureAuth+ &amp; TryHackMe — préparation pratique, Consultant Junior SAP HANA Application Security, IBM Consulting.
+  </footer>
+
+  <!-- Données locales sans restriction CORS (fonctionne en local file:/// et sur GitHub Pages) -->
+  <script src="roadmap-data.js"></script>
+
+  <script>
+    (function() {
+      const STORAGE_KEY = 'secureauth_roadmap_progress_v1';
+      const TOTAL_STEPS = 10;
+      let initialPriorities = [1, 6, 9];
+      let prioritySteps = [...initialPriorities];
+      let completedSteps = [0];
+
+      // 1. Lire d'abord les données embarquées de roadmap-data.js si présent
+      function applyData(data) {
+        if (!data) return false;
+        if (Array.isArray(data.steps) && data.steps.length > 0) {
+          completedSteps = data.steps.filter(s => s.status === 'done').map(s => s.id);
+          prioritySteps = data.steps.filter(s => s.status === 'priority').map(s => s.id);
+          return true;
+        } else if (Array.isArray(data.completedSteps)) {
+          completedSteps = data.completedSteps;
+          return true;
+        }
+        return false;
+      }
+
+      let loadedFromJS = false;
+      if (typeof ROADMAP_DATA !== 'undefined' && ROADMAP_DATA) {
+        loadedFromJS = applyData(ROADMAP_DATA);
+      }
+
+      // Fallback localStorage si non chargé depuis JS
+      if (!loadedFromJS) {
+        try {
+          const saved = localStorage.getItem(STORAGE_KEY);
+          if (saved) {
+            const parsed = JSON.parse(saved);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              completedSteps = parsed;
+            }
+          }
+        } catch (e) {}
+      }
+
+      let activeFilter = 'all';
+
+      // Load remote data from roadmap-data.json if on HTTP/HTTPS
+      async function loadRemoteData() {
+        try {
+          const res = await fetch('roadmap-data.json?t=' + Date.now());
+          if (res.ok) {
+            const data = await res.json();
+            if (applyData(data)) {
+              saveProgress();
+              updateUI();
+            }
+          }
+        } catch (e) {
+          // Sur file:/// le fetch est bloqué par le navigateur, roadmap-data.js a déjà fourni les données
+        }
+      }
+
+      function saveProgress() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(completedSteps));
+        } catch (e) {
+          console.error('Erreur écriture localStorage:', e);
+        }
+      }
+
+      function updateUI() {
+        const doneCount = completedSteps.length;
+        const pct = Math.round((doneCount / TOTAL_STEPS) * 100);
+
+        // Update hero stats
+        const statDoneEl = document.getElementById('stat-done-count');
+        const statLabelEl = document.getElementById('stat-done-label');
+        const statPctEl = document.getElementById('stat-progress-pct');
+        if (statDoneEl) statDoneEl.textContent = doneCount;
+        if (statLabelEl) statLabelEl.textContent = doneCount > 1 ? 'Modules terminés' : 'Module terminé';
+        if (statPctEl) statPctEl.textContent = pct + '%';
+
+        // Update progress card
+        const statPill = document.getElementById('progress-stat-pill');
+        const statPctBox = document.getElementById('progress-stat-pct');
+        const fillBar = document.getElementById('roadmap-progress-fill');
+        if (statPill) statPill.textContent = doneCount + ' / ' + TOTAL_STEPS + (doneCount > 1 ? ' validées' : ' validée');
+        if (statPctBox) statPctBox.textContent = pct + '%';
+        if (fillBar) fillBar.style.width = pct + '%';
+
+        // Update topbar progress
+        const topbarLine = document.getElementById('topbar-progress-line');
+        const topbarPillText = document.getElementById('topbar-pill-text');
+        if (topbarLine) topbarLine.style.width = pct + '%';
+        if (topbarPillText) topbarPillText.textContent = doneCount + '/' + TOTAL_STEPS + ' (' + pct + '%)';
+
+        // Update filter counts
+        const allCnt = document.getElementById('filter-all-cnt');
+        const todoCnt = document.getElementById('filter-todo-cnt');
+        const doneCnt = document.getElementById('filter-done-cnt');
+        if (allCnt) allCnt.textContent = TOTAL_STEPS;
+        if (todoCnt) todoCnt.textContent = TOTAL_STEPS - doneCount;
+        if (doneCnt) doneCnt.textContent = doneCount;
+
+        // Update milestones buttons
+        document.querySelectorAll('.milestone-btn').forEach(btn => {
+          const stepIdx = parseInt(btn.getAttribute('data-target'), 10);
+          const isDone = completedSteps.includes(stepIdx);
+          if (isDone) {
+            btn.classList.add('done');
+            btn.classList.remove('active');
+          } else {
+            btn.classList.remove('done');
+            if (prioritySteps.includes(stepIdx)) {
+              btn.classList.add('active');
+            } else {
+              btn.classList.remove('active');
+            }
+          }
+        });
+
+        // Update each phase card
+        for (let i = 0; i < TOTAL_STEPS; i++) {
+          const phase = document.getElementById('step-' + i);
+          const btn = document.querySelector('.step-toggle-btn[data-step="' + i + '"]');
+          if (!phase || !btn) continue;
+
+          const isDone = completedSteps.includes(i);
+          const iconEl = btn.querySelector('.check-icon');
+          const txtEl = btn.querySelector('.status-txt');
+
+          if (isDone) {
+            phase.classList.add('done');
+            phase.classList.remove('priority');
+            btn.classList.add('done');
+            btn.classList.remove('priority');
+            btn.setAttribute('aria-pressed', 'true');
+            if (iconEl) iconEl.textContent = '✓';
+            if (txtEl) txtEl.textContent = 'Terminé';
+          } else {
+            phase.classList.remove('done');
+            btn.classList.remove('done');
+            btn.setAttribute('aria-pressed', 'false');
+            if (iconEl) iconEl.textContent = '○';
+
+            if (prioritySteps.includes(i)) {
+              phase.classList.add('priority');
+              btn.classList.add('priority');
+              if (txtEl) txtEl.textContent = (i === 1) ? 'À faire maintenant' : ((i === 9) ? 'Étape finale' : 'Priorité');
+            } else {
+              phase.classList.remove('priority');
+              btn.classList.remove('priority');
+              if (txtEl) txtEl.textContent = 'À faire';
+            }
+          }
+
+          // Apply filter visibility
+          if (activeFilter === 'done') {
+            if (isDone) phase.classList.remove('is-hidden');
+            else phase.classList.add('is-hidden');
+          } else if (activeFilter === 'todo') {
+            if (!isDone) phase.classList.remove('is-hidden');
+            else phase.classList.add('is-hidden');
+          } else {
+            phase.classList.remove('is-hidden');
+          }
+        }
+      }
+
+      // Toggle step completion
+      document.querySelectorAll('.step-toggle-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const step = parseInt(this.getAttribute('data-step'), 10);
+          if (completedSteps.includes(step)) {
+            completedSteps = completedSteps.filter(s => s !== step);
+          } else {
+            completedSteps.push(step);
+            completedSteps.sort((a, b) => a - b);
+          }
+          saveProgress();
+          updateUI();
+        });
+      });
+
+      // Milestone buttons click to scroll
+      document.querySelectorAll('.milestone-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const step = this.getAttribute('data-target');
+          const target = document.getElementById('step-' + step);
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            target.style.transition = 'transform 0.3s ease';
+            target.style.transform = 'scale(1.02)';
+            setTimeout(() => { target.style.transform = ''; }, 350);
+          }
+        });
+      });
+
+      // Topbar pill click to scroll to progress card
+      const topbarPill = document.getElementById('topbar-progress-pill');
+      if (topbarPill) {
+        topbarPill.addEventListener('click', function() {
+          const box = document.getElementById('roadmap-progress');
+          if (box) box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+      }
+
+      // Filter buttons
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          activeFilter = this.getAttribute('data-filter');
+          updateUI();
+        });
+      });
+
+      // Reset button
+      const resetBtn = document.getElementById('btn-reset-progress');
+      if (resetBtn) {
+        resetBtn.addEventListener('click', function() {
+          if (confirm('Réinitialiser la progression locale à l\'état initial (Étape 0 terminée) ?')) {
+            completedSteps = [0];
+            saveProgress();
+            updateUI();
+          }
+        });
+      }
+
+      // Initialize
+      updateUI();
+      loadRemoteData();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+{
+  "lastUpdated": "2026-09-27T13:30:00Z",
+  "completedSteps": [
+    0
+  ],
+  "steps": [
+    {
+      "id": 0,
+      "title": "Module 1 — Joiner / Mover / Leaver",
+      "category": "SECUREAUTH+",
+      "status": "done",
+      "note": "Cycle de vie utilisateur — JML validé"
+    },
+    {
+      "id": 1,
+      "title": "Identity and Access Management",
+      "category": "TRYHACKME",
+      "status": "done",
+      "note": "Room Premium TryHackMe (iaaaidm) — À faire maintenant"
+    },
+    {
+      "id": 2,
+      "title": "Module 2 — Diagnostic d'Autorisation / SU53",
+      "category": "SECUREAUTH+ / THM",
+      "status": "todo",
+      "note": "Diagnostic d'autorisation + Web App Security"
+    },
+    {
+      "id": 3,
+      "title": "Module 3 — Access Review",
+      "category": "SECUREAUTH+ / THM",
+      "status": "todo",
+      "note": "Revue périodique des accès + M365 Monitoring"
+    },
+    {
+      "id": 4,
+      "title": "Module 4 — Tests d'Autorisations",
+      "category": "SECUREAUTH+",
+      "status": "todo",
+      "note": "Recette des rôles PFCG (Positive & Negative tests)"
+    },
+    {
+      "id": 5,
+      "title": "Module 5 — Segregation of Duties (SoD)",
+      "category": "SECUREAUTH+",
+      "status": "todo",
+      "note": "Matrice de conflits de rôles (GRC / Access Risk)"
+    },
+    {
+      "id": 6,
+      "title": "Module 6 — SAP HANA Database Security",
+      "category": "SECUREAUTH+ / THM",
+      "status": "priority",
+      "note": "Privilèges HANA DB + Linux Logging for SOC"
+    },
+    {
+      "id": 7,
+      "title": "Module 7 — Upgrade S/4HANA / SU24 / SU25",
+      "category": "SECUREAUTH+",
+      "status": "todo",
+      "note": "SU24 / SU25 / PFCG Merge"
+    },
+    {
+      "id": 8,
+      "title": "Module 8 — Fiori / OData / IAM / SSO",
+      "category": "SECUREAUTH+",
+      "status": "todo",
+      "note": "Catalogues Fiori, S_SERVICE et SAML2"
+    },
+    {
+      "id": 9,
+      "title": "Module 9 — Projet / Audit",
+      "category": "SECUREAUTH+ / THM",
+      "status": "priority",
+      "note": "SIEM, log analysis et boucle projet complète"
+    }
+  ]
+}
